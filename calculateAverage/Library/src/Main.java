@@ -60,11 +60,8 @@ public class Main {
                     break;
                 default:
                     System.out.println("Podano niewłaściwą cyfrę.");
-
             }
         }
-
         scanner.close();
-
     }
 }
