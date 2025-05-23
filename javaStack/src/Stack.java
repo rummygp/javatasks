@@ -57,19 +57,18 @@ public class Stack <T> {
         }
         if (top.getData().equals(data)) {
             top = top.getNext();
+            size--;
             return true;
         } else {
             Node<T> current = top;
             while (current.getNext() != null) {
                 if (current.getNext().getData().equals(data)) {
                     current.setNext(current.getNext().getNext());
+                    size--;
                     return true;
                 }
                 current = current.getNext();
             } return false;
         }
-
-
     }
-
 }
