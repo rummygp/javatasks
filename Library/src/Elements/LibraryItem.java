@@ -24,8 +24,9 @@ public abstract class LibraryItem {
     public void returnItem() {
         if (borrowed) {
             borrowed = false;
+        } else {
+            throw new BookIsNotBorrowedException(title + " Nie został wypożyczony.");
         }
-        throw new BookIsNotBorrowedException(title + " Nie został wypożyczony.");
     }
 
     public String getTitle() {
