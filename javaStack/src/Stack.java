@@ -5,7 +5,6 @@ public class Stack <T> {
     public Stack() {
         this.size = 0;
         this.top = null;
-
     }
 
     public void push(T data) {
