@@ -67,7 +67,8 @@ public class Stack <T> {
                     return true;
                 }
                 current = current.getNext();
-            } return false;
+            }
+            return false;
         }
     }
 }
