@@ -1,6 +1,8 @@
+package Elements;
+
 public class Book extends LibraryItem {
-    private String author;
-    private int pagesNumber;
+    private final String author;
+    private final int pagesNumber;
     private static int bookCount = 0;
 
     public Book(String title, String author, int pagesNumber) {
@@ -8,13 +10,11 @@ public class Book extends LibraryItem {
         this.author = author;
         this.pagesNumber = pagesNumber;
         bookCount++;
-
     }
 
     @Override
     public String toString() {
-        return "Książka: " + title + " | Autor: " + author + " | Strony: " + pagesNumber + "\n";
-
+        return "Książka: " + getTitle() + " | Autor: " + author + " | Strony: " + pagesNumber + "\n";
     }
 
     public static int getBookCount() {
