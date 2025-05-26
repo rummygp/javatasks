@@ -16,7 +16,7 @@ public class LibraryApp {
         items.add(item);
     }
 
-    public List<LibraryItem> getItems(boolean isBorrowed) throws ZeroBorrowedElementException, ZeroAvailableElementException {
+    public List<LibraryItem> getItems(boolean isBorrowed) {
         List<LibraryItem> result = new ArrayList<>();
         for (LibraryItem item : items) {
             if (item.isBorrowed() == isBorrowed) {

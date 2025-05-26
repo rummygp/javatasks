@@ -14,7 +14,7 @@ public abstract class LibraryItem {
 
     public abstract String toString();
 
-    public void borrow() throws BookAlreadyBorrowedException {
+    public void borrow() {
         if (borrowed) {
             throw new BookAlreadyBorrowedException("Element " + title + " jest już wypożyczony.");
         }
