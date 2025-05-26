@@ -43,7 +43,7 @@ public class LibraryApp {
         item.returnItem();
     }
 
-    public LibraryItem findByTitle(String title) throws ElementNotExistException {
+    public LibraryItem findByTitle(String title){
         for (LibraryItem item : items) {
             if (item.getTitle().equals(title)) {
                 return item;
