@@ -4,6 +4,7 @@ import Elements.Book;
 import Elements.Movie;
 import Exceptions.*;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Main {
@@ -60,7 +61,7 @@ public class Main {
                     default:
                         System.out.println("Podano niewłaściwą cyfrę.");
                 }
-            } catch (BookAlreadyBorrowedException | BookIsNotBorrowedException | ElementNotExistException |
+            } catch (BookAlreadyBorrowedException | BookIsNotBorrowedException | NoSuchElementException |
                      ZeroBorrowedElementException | ZeroAvailableElementException e) {
                 System.err.println("Błąd: " + e.getMessage());
             }

@@ -1,12 +1,13 @@
 package App;
 
 import Elements.LibraryItem;
-import Exceptions.ElementNotExistException;
 import Exceptions.ZeroAvailableElementException;
 import Exceptions.ZeroBorrowedElementException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class LibraryApp {
 
@@ -34,21 +35,29 @@ public class LibraryApp {
     }
 
     public void borrowItem(String title) {
-        LibraryItem item = findByTitle(title);
-        item.borrow();
+        findByTitle(title).ifPresentOrElse(
+                LibraryItem::borrow,
+                () -> {
+                    throw new NoSuchElementException("Nie ma takiego elementu");
+                }
+        );
     }
 
     public void returnItem(String title) {
-        LibraryItem item = findByTitle(title);
-        item.returnItem();
+        findByTitle(title).ifPresentOrElse(
+                LibraryItem::returnItem,
+                () -> {
+                    throw new NoSuchElementException("Nie ma takiego elementu");
+                }
+        );
     }
 
-    public LibraryItem findByTitle(String title){
+    public Optional<LibraryItem> findByTitle(String title) {
         for (LibraryItem item : items) {
             if (item.getTitle().equals(title)) {
-                return item;
+                return Optional.of(item);
             }
         }
-        throw new ElementNotExistException("Nie znaleziono " + title + " w bibliotece");
+        return Optional.empty();
     }
 }
