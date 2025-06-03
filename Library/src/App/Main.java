@@ -34,11 +34,11 @@ public class Main {
                 switch (choice) {
                     case "1":
                         System.out.println("\n Dostępne");
-                        System.out.println(libraryApp.getItems(false));
+                        System.out.println(libraryApp.getAvailableItems());
                         break;
                     case "2":
                         System.out.println("\n Wypożyczone");
-                        System.out.println(libraryApp.getItems(true));
+                        System.out.println(libraryApp.getBorrowedItems());
                         break;
                     case "3":
                         System.out.println("Podaj tytuł do wypożyczenia: ");
@@ -61,8 +61,7 @@ public class Main {
                     default:
                         System.out.println("Podano niewłaściwą cyfrę.");
                 }
-            } catch (BookAlreadyBorrowedException | BookIsNotBorrowedException | NoSuchElementException |
-                     ZeroBorrowedElementException | ZeroAvailableElementException e) {
+            } catch (BookAlreadyBorrowedException | BookIsNotBorrowedException | NoSuchElementException e) {
                 System.err.println("Błąd: " + e.getMessage());
             }
         }

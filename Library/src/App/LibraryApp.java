@@ -1,13 +1,12 @@
 package App;
 
 import Elements.LibraryItem;
-import Exceptions.ZeroAvailableElementException;
-import Exceptions.ZeroBorrowedElementException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class LibraryApp {
 
@@ -17,47 +16,33 @@ public class LibraryApp {
         items.add(item);
     }
 
-    public List<LibraryItem> getItems(boolean isBorrowed) {
-        List<LibraryItem> result = new ArrayList<>();
-        for (LibraryItem item : items) {
-            if (item.isBorrowed() == isBorrowed) {
-                result.add(item);
-            }
-        }
-        if (result.isEmpty()) {
-            if (isBorrowed) {
-                throw new ZeroBorrowedElementException("Brak wypożyczonych elementów");
-            } else {
-                throw new ZeroAvailableElementException("Brak dostępnych elementów");
-            }
-        }
-        return result;
+    public List<LibraryItem> getAvailableItems() {
+        return items.stream()
+                .filter(i -> !i.isBorrowed())
+                .collect(Collectors.toList());
+    }
+
+    public List<LibraryItem> getBorrowedItems() {
+        return items.stream()
+                .filter(LibraryItem::isBorrowed)
+                .collect(Collectors.toList());
     }
 
     public void borrowItem(String title) {
-        findByTitle(title).ifPresentOrElse(
-                LibraryItem::borrow,
-                () -> {
-                    throw new NoSuchElementException("Nie ma takiego elementu");
-                }
-        );
+        LibraryItem item = findByTitle(title)
+                .orElseThrow(() -> new NoSuchElementException("Nie ma takiego elementu"));
+        item.borrow();
     }
 
     public void returnItem(String title) {
-        findByTitle(title).ifPresentOrElse(
-                LibraryItem::returnItem,
-                () -> {
-                    throw new NoSuchElementException("Nie ma takiego elementu");
-                }
-        );
+        LibraryItem item = findByTitle(title)
+                .orElseThrow(() -> new NoSuchElementException("Nie ma takiego elementu"));
+        item.returnItem();
     }
 
     public Optional<LibraryItem> findByTitle(String title) {
-        for (LibraryItem item : items) {
-            if (item.getTitle().equals(title)) {
-                return Optional.of(item);
-            }
-        }
-        return Optional.empty();
+        return items.stream()
+                .filter(items -> items.getTitle().equals(title))
+                .findFirst();
     }
 }
