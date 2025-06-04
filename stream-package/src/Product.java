@@ -14,4 +14,13 @@ public class Product {
     public String getName() { return name; }
     public String getCategory() { return category; }
     public BigDecimal getPrice() { return price; }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }

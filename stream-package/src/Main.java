@@ -1,6 +1,8 @@
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,7 +30,9 @@ public class Main {
         //
         //podpowiastka uzyć gdzieś trzeba Collectors.reducing
         System.out.println("Zadanie 1: " + getPopularProduct());
-        System.out.println("Zadanie 2: " + calculateTotalSpentPerClient(orders, products));
+        System.out.println("Zadanie 2: " + calculateTotalSpentPerClient());
+        System.out.println("Zadanie 3: " + getRegionsByCategory());
+        System.out.println("Zadanie 4: " + getMostExpensiveOrderedProduct());
 
     }
 
@@ -46,20 +50,20 @@ public class Main {
                         Order::getProductName,
                         Collectors.mapping(Order::getClientName, Collectors.toSet())))
                 .entrySet().stream()
-                .filter(set -> set.getValue().size() > 3)
+                .filter(entry -> entry.getValue().size() > 3)
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public static Map<String, BigDecimal> calculateTotalSpentPerClient(List<Order> orders, List<Product> products) {
-        return orders.stream()
+    public static Map<String, BigDecimal> calculateTotalSpentPerClient() {
+        return getOrdersStream()
                 .collect(Collectors.groupingBy(
                         Order::getClientName,
                         Collectors.reducing(
                                 BigDecimal.ZERO,
                                 order -> {
-                                    Product product = products.stream()
-                                            .filter(p -> p.getName().equals(order.getProductName()))
+                                    Product product = getProductStream()
+                                            .filter(product1 -> product1.getName().equals(order.getProductName()))
                                             .findFirst()
                                             .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono produktu: " +
                                                     order.getProductName()));
@@ -68,5 +72,30 @@ public class Main {
                                 BigDecimal::add
                         )
                 ));
+    }
+
+    public static Map<String, Set<String>> getRegionsByCategory() {
+        return getOrdersStream()
+                .collect(Collectors.groupingBy(
+                        order -> getProductStream()
+                                .filter(product -> product.getName().equals(order.getProductName()))
+                                .findFirst()
+                                .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono produktu " +
+                                        order.getProductName()))
+                                .getCategory(),
+                        Collectors.mapping(Order::getRegion, Collectors.toSet())
+                ));
+    }
+
+    public static Product getMostExpensiveOrderedProduct () {
+        return getOrdersStream()
+                .map(Order::getProductName)
+                .distinct()
+                .map(productName -> getProductStream()
+                        .filter(product -> product.getName().equals(productName))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("Brak produktu: " + productName)))
+                .max(Comparator.comparing(Product::getPrice))
+                .orElseThrow(() -> new IllegalArgumentException("Brak zamówionych produktów"));
     }
 }
